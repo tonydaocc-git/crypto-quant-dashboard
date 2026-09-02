@@ -11,7 +11,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Custom CSS mô phỏng phong cách Apple Minimalist (Light theme, bo góc mượt, chữ thanh mảnh)
+# Custom CSS mô phỏng phong cách Apple Minimalist
 st.markdown("""
     <style>
     .main { background-color: #F5F5F7; }
@@ -32,7 +32,7 @@ st.markdown("""
 st.markdown("<h1 style='font-weight: 300; font-size: 2.2rem;'>Quant Analytics Dashboard</h1>", unsafe_allow_html=True)
 st.markdown("<p style='color: #86868B; font-size: 0.9rem;'>Hệ thống theo dõi dòng tiền thông minh & Cảnh báo sớm qua AI</p>", unsafe_allow_html=True)
 
-# --- NHẬP GEMINI API KEY QUA SIDEBAR HOẶC SECRETS ---
+# --- NHẬP GEMINI API KEY QUA SIDEBAR ---
 with st.sidebar:
     st.markdown("### ⚙️ Cấu hình hệ thống")
     api_key_input = st.text_input("Nhập Gemini API Key của bạn:", type="password")
@@ -42,7 +42,7 @@ with st.sidebar:
     else:
         st.info("Vui lòng nhập API Key để kích hoạt trợ lý AI.")
 
-# --- MACRO METRICS BAR (Dữ liệu Live cơ bản từ CoinGecko/Binance public) ---
+# --- MACRO METRICS BAR ---
 col1, col2, col3, col4 = st.columns(4)
 with col1:
     st.markdown("<div class='metric-container'><b>Tổng Vốn hóa (Market Cap)</b><br><span style='font-size:1.2rem; font-weight:600;'>$2.68 Trillion</span></div>", unsafe_allow_html=True)
@@ -55,7 +55,7 @@ with col4:
 
 st.write("")
 
-# --- TABS ĐIỀU HƯỚNG CÁC ENGINE ---
+# --- TABS ĐIỀU HƯỚNG ---
 tab1, tab2, tab3, tab4 = st.tabs([
     "🟢 Engine 1: Tích lũy & Sybil", 
     "🟣 Engine 2: Phái sinh & Bẫy", 
@@ -66,31 +66,23 @@ tab1, tab2, tab3, tab4 = st.tabs([
 with tab1:
     st.markdown("### Động cơ 1: Phân tầng Dòng tiền On-chain & Chống nhiễu")
     st.info("💡 **AI Macro Insight:** Dòng tiền rút khỏi sàn (Netflow âm) đang tăng, xác nhận quá trình gom hàng ngầm của các tổ chức lớn.")
-    
-    col_a, col_b = st.columns(2)
-    with col_a:
-        st.markdown("<div class='stCard'><h4>1.1 Phân tầng Số dư (Cohorts)</h4><p style='color:#86868B; font-size:0.85rem;'>So sánh biến động số dư giữa Cá mập và Nhỏ lẻ.</p></div>", unsafe_allow_html=True)
-    with col_b:
-        st.markdown("<div class='stCard'><h4>1.2 Dòng tiền Sàn (Netflow)</h4><p style='color:#86868B; font-size:0.85rem;'>Kiểm soát lượng tài sản dịch chuyển ra ví lạnh.</p></div>", unsafe_allow_html=True)
 
 with tab2:
     st.markdown("### Động cơ 2: Sức khỏe Phái sinh & Giải mã MM Trap")
     st.info("⚠️ **AI Macro Insight:** Open Interest tăng nhưng CVD Giao ngay phân kỳ giảm. Cảnh báo bẫy tạo lập thị trường!")
-    st.markdown("<div class='stCard'><h4>2.3 Phân kỳ CVD và Open Interest (Anti-Trap)</h4><p style='color:#86868B; font-size:0.85rem;'>Phát hiện lệnh đòn bẩy ảo chuẩn bị quét thanh lý.</p></div>", unsafe_allow_html=True)
 
 with tab3:
     st.markdown("### Động cơ 3: Cảnh báo Kiệt sức & Đỉnh chu kỳ")
     st.info("🚨 **AI Macro Insight:** MVRV-Z tiến sát vùng rủi ro. Khuyến nghị quản trị vốn chặt chẽ.")
-    st.markdown("<div class='stCard'><h4>3.1 Chỉ số MVRV-Z Score</h4><p style='color:#86868B; font-size:0.85rem;'>Định giá nhiệt độ thị trường dựa trên On-chain cost basis.</p></div>", unsafe_allow_html=True)
 
 with tab4:
     st.markdown("### 💬 Prompt-to-Visualize & AI Assistant")
-    user_query = st.text_area("Nhập câu hỏi hoặc yêu cầu phân tích giả định cho Gemini AI:", placeholder="Ví dụ: Đánh giá giúp tôi rủi ro thị trường trong 48h tới dựa trên cấu trúc Open Interest hiện tại...")
+    user_query = st.text_area("Nhập câu hỏi hoặc yêu cầu phân tích giả định cho Gemini AI:", placeholder="Ví dụ: Đánh giá giúp tôi rủi ro thị trường trong 48h tới...")
     if st.button("Phân tích ngay", type="primary"):
         if api_key_input:
             try:
                 model = genai.GenerativeModel('gemini-1.5-flash')
-                response = model.generate_content(f"Bạn là một chuyên gia phân tích dữ liệu định lượng crypto (Quant Analyst). Hãy phân tích yêu cầu sau dưới góc nhìn chuyên sâu, khách quan và thực tế: {user_query}")
+                response = model.generate_content(f"Bạn là một chuyên gia phân tích dữ liệu định lượng crypto. Hãy phân tích yêu cầu sau: {user_query}")
                 st.markdown("### 🤖 Kết quả phân tích từ Gemini:")
                 st.success(response.text)
             except Exception as e:
